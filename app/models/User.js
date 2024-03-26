@@ -16,14 +16,5 @@ const User = sequelize.define('User', {
 
 User.belongsTo(Role, { as: "role" });
 
-// (async() => {
-//     try {
-//         await User.sync({ alter: true });
-//         console.log("User table init");
-//     } catch (error) {
-//         console.log(error);
-//     }
-// })();
-
 
 module.exports = User;
