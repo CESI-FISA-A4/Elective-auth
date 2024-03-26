@@ -31,12 +31,12 @@ async function initializeRoles() {
                 { label: 'restaurant owner' },
                 { label: 'deliveryman' }
             ]);
-            console.log('Les rôles par défaut ont été créés avec succès.');
+            console.log('Roles created successfully');
         } else {
-            console.log('Les rôles existent déjà dans la base de données.');
+            console.log('Roles already exist');
         }
     } catch (error) {
-        console.error('Erreur lors de l\'initialisation des rôles :', error);
+        console.error('Error during roles creation:', error);
     }
 }
 

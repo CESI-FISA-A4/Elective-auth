@@ -9,8 +9,9 @@ const secretKey = process.env.JWT_SIGN_SECRET;
 module.exports = {
     registerView: async(req, res) => {
         try {
-            const { username, password, role } = req.body;
-            if (!username || !password || !role) return res.status(400).send('Username, password and role required');
+            console.log(req.body);
+            const { username, password, roleLabel } = req.body;
+            if (!username || !password || !roleLabel) return res.status(400).send('Username, password and role required');
 
             const user = await User.findOne({
                 where: {
@@ -20,24 +21,25 @@ module.exports = {
 
             if (user) return res.status(400).send('User already exists');
 
-            const roleFind = await Role.findOne({
+            const roleFound = await Role.findOne({
                 where: {
-                    ["label"]: role
+                    ["label"]: roleLabel
                 }
             });
 
-            if (!roleFind) return res.status(400).send('Wrong role');
+            if (!roleFound) return res.status(400).send('Wrong role');
 
             const hashedPassword = await bcrypt.hash(password, 10);
 
             await User.create({
                 username,
                 password: hashedPassword,
-                roleId: roleFind.id
+                roleId: roleFound.id
             });
 
             res.status(200).send('User created successfuly');
         } catch (error) {
+            console.log(error);
             return res.status(500).json({ "error": "internal error" });
         }
     },
@@ -62,6 +64,7 @@ module.exports = {
             const token = jwt.sign({ username, role: userRole }, secretKey, { expiresIn: '1h' });
             res.status(200).json({ token });
         } catch (error) {
+            console.log(error);
             return res.status(500).json({ "error": "internal error" });
         }
     },
@@ -89,6 +92,7 @@ module.exports = {
 
             res.status(200).send('Password successfuly changed!');
         } catch (error) {
+            console.log(error);
             return res.status(500).json({ "error": "internal error" });
         }
     },
@@ -104,6 +108,7 @@ module.exports = {
                 return res.status(200).json({ "information": "Token decoded", "user": decoded });
             });
         } catch (error) {
+            console.log(error);
             return res.status(500).json({ "error": "internal error" });
         }
     }
