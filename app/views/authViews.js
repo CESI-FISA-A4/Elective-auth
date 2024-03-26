@@ -9,7 +9,6 @@ const secretKey = process.env.JWT_SIGN_SECRET;
 module.exports = {
     registerView: async(req, res) => {
         try {
-            console.log(req.body);
             const { username, password, roleLabel } = req.body;
             if (!username || !password || !roleLabel) return res.status(400).send('Username, password and role required');
 

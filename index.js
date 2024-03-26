@@ -12,7 +12,7 @@ app.use(express.json());
 
 
 app.use('/api/auth', authRoutes);
-app.use('/api/roles', roleRouter);
+app.use('/api/auth/roles', roleRouter);
 
 const PORT = process.env.PORT || 5000;
 const HOST = process.env.HOST;
