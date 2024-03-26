@@ -60,7 +60,7 @@ module.exports = {
 
             const userRole = await user.getRole();
 
-            const token = jwt.sign({ username, role: userRole }, secretKey, { expiresIn: '1h' });
+            const token = jwt.sign({ userID: user.id, role: userRole.label }, secretKey, { expiresIn: '1h' });
             res.status(200).json({ token });
         } catch (error) {
             console.log(error);
@@ -104,7 +104,7 @@ module.exports = {
 
             jwt.verify(token, secretKey, (err, decoded) => {
                 if (err) return res.status(403).send('Wrong token');
-                return res.status(200).json({ "information": "Token decoded", "user": decoded });
+                return res.status(200).json({ "information": "Token decoded", ...decoded });
             });
         } catch (error) {
             console.log(error);
