@@ -10,6 +10,8 @@ const sequelize = new Sequelize(process.env.DB_DATABASE, process.env.DB_USER, pr
 
 async function syncDatabase() {
     try {
+        require('../models/Role');
+        require('../models/User');
         await sequelize.sync({ alter: true });
         console.log('Model sync successfully');
     } catch (error) {

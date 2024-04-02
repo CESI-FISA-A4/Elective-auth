@@ -11,10 +11,31 @@ const User = sequelize.define('User', {
     password: {
         type: DataTypes.STRING,
         allowNull: false
+    },
+    firstname: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    lastname: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    refreshToken: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    roleId: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+    mentorId: {
+        type: DataTypes.INTEGER,
+        allowNull: true
     }
 });
 
-User.belongsTo(Role, { as: "role" });
+User.belongsTo(User, { as: 'mentor', foreignKey: 'mentorId' });
+User.belongsTo(Role, { as: 'role', foreignKey: 'roleId' });
 
 
 module.exports = User;
