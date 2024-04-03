@@ -63,8 +63,8 @@ module.exports = {
 
             const userRole = await user.getRole();
 
-            const accessToken = jwt.sign({ username: user.username, role: userRole.label, exp: Math.floor(Date.now() / 1000) + 120 }, process.env.JWT_SIGN_SECRET);
-            const refreshToken = jwt.sign({ username: user.username, role: userRole.label }, process.env.REFRESH_TOKEN_KEY);
+            const accessToken = jwt.sign({ username: user.username, userId: user.id, roleLabel: userRole.label, exp: Math.floor(Date.now() / 1000) + 120 }, process.env.JWT_SIGN_SECRET);
+            const refreshToken = jwt.sign({ username: user.username, userId: user.id, roleLabel: userRole.label }, process.env.REFRESH_TOKEN_KEY);
 
             user.refreshToken = refreshToken;
             await user.save();
