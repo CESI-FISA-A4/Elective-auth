@@ -9,8 +9,8 @@ const secretKey = process.env.JWT_SIGN_SECRET;
 module.exports = {
     registerView: async(req, res) => {
         try {
-            const { username, password, roleLabel } = req.body;
-            if (!username || !password || !roleLabel) return res.status(400).send('Username, password and role required');
+            const { username, password, firstname, lastname, roleLabel } = req.body;
+            if (!username || !password || !roleLabel) return res.status(400).send('Username, password, firstname, lastname and role required');
 
             const user = await User.findOne({
                 where: {
@@ -32,11 +32,13 @@ module.exports = {
 
             await User.create({
                 username,
+                firstname,
+                lastname,
                 password: hashedPassword,
                 roleId: roleFound.id
             });
 
-            res.status(200).send('User created successfuly');
+            res.status(201).send('User created successfuly');
         } catch (error) {
             console.log(error);
             return res.status(500).json({ "error": "internal error" });
@@ -60,8 +62,13 @@ module.exports = {
 
             const userRole = await user.getRole();
 
-            const token = jwt.sign({ userID: user.id, role: userRole.label }, secretKey, { expiresIn: '1h' });
-            res.status(200).json({ token });
+            const accessToken = jwt.sign({ username: user.username, role: userRole.label, exp: Math.floor(Date.now() / 1000) + 120 }, process.env.JWT_SIGN_SECRET);
+            const refreshToken = jwt.sign({ username: user.username, role: userRole.label }, process.env.REFRESH_TOKEN_KEY);
+
+            user.refreshToken = refreshToken;
+            await user.save();
+
+            res.status(200).json({ accessToken, refreshToken });
         } catch (error) {
             console.log(error);
             return res.status(500).json({ "error": "internal error" });
@@ -94,6 +101,21 @@ module.exports = {
             console.log(error);
             return res.status(500).json({ "error": "internal error" });
         }
+    },
+
+    refreshToken: (req, res) => {
+        const refreshToken = req.body.refreshToken;
+
+        if (!refreshToken) return res.status(401).json({ message: "Invalid refresh token" });
+
+        jwt.verify(refreshToken, process.env.REFRESH_TOKEN_KEY, (err, decoded) => {
+            if (err) {
+                return res.status(401).json({ message: "Invalid refresh token" });
+            } else {
+                const accessToken = jwt.sign({ username: decoded.username, exp: Math.floor(Date.now() / 1000) + 120 }, process.env.JWT_SIGN_SECRET);
+                return res.status(200).json({ accessToken });
+            }
+        });
     },
 
     verifyTokenView: (req, res) => {
