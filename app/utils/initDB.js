@@ -28,10 +28,13 @@ async function initializeRoles() {
         // S'il n'y a aucun rôle, créer les rôles par défaut
         if (!existingRoles.length) {
             await Role.bulkCreate([
-                { label: 'admin' },
                 { label: 'user' },
-                { label: 'restaurant owner' },
-                { label: 'deliveryman' }
+                { label: 'admin' },
+                { label: 'deleveryman' },
+                { label: 'restaurantOwner' },
+                { label: 'salesman' },
+                { label: 'technician' },
+                { label: 'developer' }
             ]);
             console.log('Roles created successfully');
         } else {
@@ -41,6 +44,7 @@ async function initializeRoles() {
         console.error('Error during roles creation:', error);
     }
 }
+
 
 async function connectToDatabase() {
     try {
