@@ -3,9 +3,13 @@ const express = require('express');
 const authRoutes = require('./app/routes/authRoutes');
 const { connectToDatabase } = require('./app/utils/initDB');
 const roleRouter = require('./app/routes/roleRoutes');
+const { subscribeToApiGateway } = require('./app/utils/registrySubscription');
 
 // Connect to DB
 connectToDatabase();
+
+// Subscribe to API GATEWAY
+subscribeToApiGateway();
 
 const app = express();
 app.use(express.json());
