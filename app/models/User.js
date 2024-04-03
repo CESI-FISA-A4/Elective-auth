@@ -28,10 +28,26 @@ const User = sequelize.define('User', {
         type: DataTypes.INTEGER,
         allowNull: false
     },
+    suspend: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+    },
+    address: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    mentorCode: {
+        type: DataTypes.INTEGER,
+        allowNull: true
+    },
     mentorId: {
         type: DataTypes.INTEGER,
         allowNull: true
-    }
+    },
+    imageUrl: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
 });
 
 User.belongsTo(User, { as: 'mentor', foreignKey: 'mentorId' });

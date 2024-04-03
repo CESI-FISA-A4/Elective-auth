@@ -9,8 +9,8 @@ const secretKey = process.env.JWT_SIGN_SECRET;
 module.exports = {
     registerView: async(req, res) => {
         try {
-            const { username, password, firstname, lastname, roleLabel } = req.body;
-            if (!username || !password || !roleLabel) return res.status(400).send('Username, password, firstname, lastname and role required');
+            const { username, password, firstname, lastname, roleLabel, address } = req.body;
+            if (!username || !password || !firstname || !lastname || !roleLabel || !address) return res.status(400).send('Username, password, firstname, lastname, roleLabel and address required');
 
             const user = await User.findOne({
                 where: {
@@ -35,7 +35,8 @@ module.exports = {
                 firstname,
                 lastname,
                 password: hashedPassword,
-                roleId: roleFound.id
+                roleId: roleFound.id,
+                address
             });
 
             res.status(201).send('User created successfuly');
