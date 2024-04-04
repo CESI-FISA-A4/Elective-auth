@@ -63,13 +63,13 @@ module.exports = {
 
             const userRole = await user.getRole();
 
-            const accessToken = jwt.sign({ username: user.username, userId: user.id, roleLabel: userRole.label, exp: Math.floor(Date.now() / 1000) + 120 }, process.env.JWT_SIGN_SECRET);
+            const accessToken = jwt.sign({ username: user.username, userId: user.id, roleLabel: userRole.label, exp: Math.floor(Date.now() / 1000) + 1200 }, process.env.JWT_SIGN_SECRET);
             const refreshToken = jwt.sign({ username: user.username, userId: user.id, roleLabel: userRole.label }, process.env.REFRESH_TOKEN_KEY);
 
             user.refreshToken = refreshToken;
             await user.save();
 
-            res.status(200).json({ accessToken, refreshToken });
+            res.status(200).json({ accessToken, refreshToken, userId: user.id });
         } catch (error) {
             console.log(error);
             return res.status(500).json({ "error": "internal error" });
@@ -122,6 +122,7 @@ module.exports = {
     verifyTokenView: (req, res) => {
         try {
             const token = req.headers['Authorization'] || req.headers['authorization'];
+            if (token.startsWith("Bearer ")) token = token.slice(7);
 
             if (!token) return res.status(401).send('Token not found');
 
