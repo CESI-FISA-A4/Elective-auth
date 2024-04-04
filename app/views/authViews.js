@@ -113,7 +113,7 @@ module.exports = {
             if (err) {
                 return res.status(401).json({ message: "Invalid refresh token" });
             } else {
-                const accessToken = jwt.sign({ username: decoded.username, exp: Math.floor(Date.now() / 1000) + 120 }, process.env.JWT_SIGN_SECRET);
+                const accessToken = jwt.sign({ username: decoded.username, userId: decoded.id, roleLabel: decoded.roleLabel, exp: Math.floor(Date.now() / 1000) + 1200 }, process.env.JWT_SIGN_SECRET);
                 return res.status(200).json({ accessToken });
             }
         });
