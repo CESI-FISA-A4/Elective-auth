@@ -63,8 +63,8 @@ module.exports = {
 
             const userRole = await user.getRole();
 
-            const accessToken = jwt.sign({ username: user.username, userId: user.id, roleLabel: userRole.label, exp: Math.floor(Date.now() / 1000) + 1200 }, process.env.JWT_SIGN_SECRET);
-            const refreshToken = jwt.sign({ username: user.username, userId: user.id, roleLabel: userRole.label }, process.env.REFRESH_TOKEN_KEY);
+            const accessToken = jwt.sign({ username: user.username, userId: user.id, roleLabel: userRole.label }, process.env.JWT_SIGN_SECRET, { expiresIn: 3600 });
+            const refreshToken = jwt.sign({ username: user.username, userId: user.id, roleLabel: userRole.label }, process.env.REFRESH_TOKEN_KEY, { expiresIn: "7d" });
 
             user.refreshToken = refreshToken;
             await user.save();
@@ -113,7 +113,7 @@ module.exports = {
             if (err) {
                 return res.status(401).json({ message: "Invalid refresh token" });
             } else {
-                const accessToken = jwt.sign({ username: decoded.username, userId: decoded.id, roleLabel: decoded.roleLabel, exp: Math.floor(Date.now() / 1000) + 1200 }, process.env.JWT_SIGN_SECRET);
+                const accessToken = jwt.sign({ username: decoded.username, userId: decoded.userId, roleLabel: decoded.roleLabel }, process.env.JWT_SIGN_SECRET, { expiresIn: 3600 });
                 return res.status(200).json({ accessToken });
             }
         });
