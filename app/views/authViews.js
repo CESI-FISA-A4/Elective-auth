@@ -121,11 +121,12 @@ module.exports = {
 
     verifyTokenView: (req, res) => {
         try {
-            const token = req.headers['Authorization'] || req.headers['authorization'];
-            if (token.startsWith("Bearer ")) token = token.slice(7);
+            let token = req.headers['Authorization'] || req.headers['authorization'];
 
             if (!token) return res.status(401).send('Token not found');
-
+            
+            if (token.startsWith("Bearer ")) token = token.slice(7);
+            
             jwt.verify(token, secretKey, (err, decoded) => {
                 if (err) return res.status(403).send('Wrong token');
                 return res.status(200).json({ "information": "Token decoded", ...decoded });
