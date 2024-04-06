@@ -39,7 +39,7 @@ module.exports = {
                 address
             });
 
-            res.status(201).send('User created successfuly');
+            res.status(201).send('User created successfully');
         } catch (error) {
             console.log(error);
             return res.status(500).json({ "error": "internal error" });
@@ -97,7 +97,7 @@ module.exports = {
                 ["password"]: hashedNewPassword
             });
 
-            res.status(200).send('Password successfuly changed!');
+            res.status(200).send('Password successfully changed!');
         } catch (error) {
             console.log(error);
             return res.status(500).json({ "error": "internal error" });
