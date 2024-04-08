@@ -65,6 +65,8 @@ module.exports = {
             const validPassword = await bcrypt.compare(password, user.password); // Comparaison des hashs
             if (!validPassword) return res.status(401).send('Wrong password');
 
+            if(user.suspend) return res.status(403).send('Account disabled');
+
             const userRole = await user.getRole();
 
             const accessToken = jwt.sign({ username: user.username, userId: user.id, roleLabel: userRole.label }, process.env.JWT_SIGN_SECRET, { expiresIn: 3600 });
@@ -113,10 +115,14 @@ module.exports = {
 
         if (!refreshToken) return res.status(401).json({ message: "Invalid refresh token" });
 
-        jwt.verify(refreshToken, process.env.REFRESH_TOKEN_KEY, (err, decoded) => {
+        jwt.verify(refreshToken, process.env.REFRESH_TOKEN_KEY, async(err, decoded) => {
             if (err) {
                 return res.status(401).json({ message: "Invalid refresh token" });
             } else {
+                const user = await User.findByPk(decoded.userId);
+                if (!user) return res.status(401).send('User not found');
+                if(user.suspend) return res.status(403).send('Account disabled');
+
                 const accessToken = jwt.sign({ username: decoded.username, userId: decoded.userId, roleLabel: decoded.roleLabel }, process.env.JWT_SIGN_SECRET, { expiresIn: 3600 });
                 return res.status(200).json({ accessToken });
             }
@@ -131,8 +137,12 @@ module.exports = {
             
             if (token.startsWith("Bearer ")) token = token.slice(7);
             
-            jwt.verify(token, secretKey, (err, decoded) => {
+            jwt.verify(token, secretKey, async(err, decoded) => {
                 if (err) return res.status(403).send('Wrong token');
+                const user = await User.findByPk(decoded.userId);
+                if (!user) return res.status(401).send('User not found');
+                if(user.suspend) return res.status(403).send('Account disabled');
+
                 return res.status(200).json({ "information": "Token decoded", ...decoded });
             });
         } catch (error) {
