@@ -37,7 +37,7 @@ const User = sequelize.define('User', {
         allowNull: false
     },
     mentorCode: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: true
     },
     mentorId: {

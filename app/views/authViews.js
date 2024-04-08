@@ -64,7 +64,7 @@ module.exports = {
             numericCode += Math.floor(Math.random() * 10); // Générer un chiffre aléatoire entre 0 et 9
         }
 
-        return parseInt(dateString+numericCode);
+        return dateString+numericCode;
     },
 
     loginView: async(req, res) => {
