@@ -40,7 +40,8 @@ module.exports = {
                 lastname,
                 password: hashedPassword,
                 roleId: roleFound.id,
-                address
+                address,
+                mentorCode: module.exports.generateMentorCode()
             });
 
             res.status(201).send('User created successfully');
@@ -48,6 +49,22 @@ module.exports = {
             console.log(error);
             return res.status(500).json({ "error": "internal error" });
         }
+    },
+
+    generateMentorCode: () => {
+        const currentDate = new Date();
+
+        const year = currentDate.getFullYear().toString().slice(-2);
+        const month = currentDate.getMonth() + 1; // Les mois commencent à 0, donc on ajoute 1
+        const day = currentDate.getDate();
+
+        const dateString = `${year}${month < 10 ? '0' : ''}${month}${day < 10 ? '0' : ''}${day}`;
+        let numericCode = '';
+        for (let i = 0; i < 6; i++) {
+            numericCode += Math.floor(Math.random() * 10); // Générer un chiffre aléatoire entre 0 et 9
+        }
+
+        return parseInt(dateString+numericCode);
     },
 
     loginView: async(req, res) => {
