@@ -30,7 +30,7 @@ async function initializeRoles() {
             await Role.bulkCreate([
                 { label: 'user' },
                 { label: 'admin' },
-                { label: 'deleveryman' },
+                { label: 'deliveryman' },
                 { label: 'restaurantOwner' },
                 { label: 'salesman' },
                 { label: 'technician' },
