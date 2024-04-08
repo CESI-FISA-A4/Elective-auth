@@ -28,7 +28,7 @@ module.exports = {
 
             if (!roleFound) return res.status(400).send('Wrong role');
 
-            let isRoleAllowed = ["deleveryman", "developer", "restaurantOwner", "user", "technician", "salesman"].find((roleAllowed) => roleAllowed == roleFound.label);
+            let isRoleAllowed = ["deliveryman", "developer", "restaurantOwner", "user", "technician", "salesman"].find((roleAllowed) => roleAllowed == roleFound.label);
 
             if(!isRoleAllowed) return res.status(403).send('Role forbidden');
 
