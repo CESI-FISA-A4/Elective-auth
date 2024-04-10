@@ -1,12 +1,13 @@
 // Auth routes
 const express = require('express');
-const { registerView, loginView, changePasswordView, verifyTokenView, refreshToken } = require('../views/authViews');
+const { registerView, loginView, changePasswordView, verifyTokenView, refreshToken, ping } = require('../views/authViews');
 
 const authRoutes = express.Router();
 
 /** -------------------------------------------AUTH Routes--------------------------------------------------- */
 
 
+authRoutes.get('/ping', ping);
 authRoutes.post('/register', registerView);
 authRoutes.post('/login', loginView);
 authRoutes.post('/change-password', changePasswordView);

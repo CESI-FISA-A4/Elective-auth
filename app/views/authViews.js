@@ -7,6 +7,9 @@ const Role = require('../models/Role');
 const secretKey = process.env.JWT_SIGN_SECRET;
 
 module.exports = {
+    ping: async(req, res)=>{
+        return res.status(200).send();
+    },
     registerView: async(req, res) => {
         try {
             const { username, password, firstname, lastname, roleLabel, address } = req.body;
