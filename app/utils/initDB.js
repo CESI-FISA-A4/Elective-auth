@@ -47,14 +47,14 @@ async function initializeRoles() {
 
 
 async function connectToDatabase() {
-    try {
+    // try {
         await sequelize.authenticate();
         console.log('Connection has been established successfully.');
         await syncDatabase();
         await initializeRoles();
-    } catch (error) {
-        console.error('Unable to connect to the database:', error);
-    }
+    // } catch (error) {
+    //     console.error('Unable to connect to the database:', error);
+    // }
 }
 
 module.exports = { connectToDatabase: connectToDatabase, sequelize: sequelize, syncDatabase: syncDatabase };
