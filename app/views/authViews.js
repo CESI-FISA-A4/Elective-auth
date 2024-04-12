@@ -131,9 +131,11 @@ module.exports = {
     },
 
     refreshToken: (req, res) => {
-        const refreshToken = req.body.refreshToken;
+        let refreshToken = req.body.refreshToken;
 
         if (!refreshToken) return res.status(401).json({ message: "Invalid refresh token" });
+
+        if (refreshToken.startsWith("Bearer ")) refreshToken = refreshToken.slice(7);
 
         jwt.verify(refreshToken, process.env.REFRESH_TOKEN_KEY, async(err, decoded) => {
             if (err) {
